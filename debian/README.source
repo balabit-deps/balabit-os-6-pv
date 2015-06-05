@@ -1,0 +1,13 @@
+pv for Debian
+-------------
+
+To build this package, follow those steps:
+
+    uscan --download-current
+    git-buildpackage
+
+We use the "underlay" mechanism of git-buildpackage to build this. uscan
+should also check the upstream OpenPGP signature block, even though
+there is no confidence in the upstream key as it is not publicly signed.
+
+ -- Antoine Beaupré <anarcat@debian.org>, Thu,  3 Jul 2014 17:16:05 -0400

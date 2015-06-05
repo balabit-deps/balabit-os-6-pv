@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+
+DEB_HOST_ARCH_OS        ?= $(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
+
+%:
+	dh $@
+
+# autoconf/make contain *.mk~ files that are needed for the build
+override_dh_prep:
+	dh_prep -Xmk~
+
+override_dh_clean:
+	dh_clean -Xmk~
+
+# upstream tests fail with non-C locales
+# Functions msgsnd, msgrcv, msgget, msgctl are not yet implemented on GNU/Hurd
+override_dh_auto_test:
+ifeq (hurd,$(DEB_HOST_ARCH_OS))
+	mv tests/018-remote-format .
+	mv tests/019-remote-cksum .
+	dh_auto_test
+	mv ./018-remote-format ./tests
+	mv ./019-remote-cksum ./tests
+else
+	dh_auto_test
+endif
